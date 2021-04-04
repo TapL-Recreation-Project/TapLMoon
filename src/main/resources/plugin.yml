@@ -1,0 +1,7 @@
+name: TapLMoon
+version: ${project.version}
+main: dev.barfuzzle99.taplmoon.taplmoon.TaplMoon
+api-version: 1.16
+load: POSTWORLD
+depend:
+  - AdvancedWorldCreatorAPI
