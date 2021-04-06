@@ -1,5 +1,6 @@
 package dev.barfuzzle99.taplmoon.taplmoon;
 
+import dev.barfuzzle99.taplmoon.taplmoon.stored.PlayerPercentages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -71,6 +72,8 @@ public class CmdTaplMoon implements TabExecutor {
         } else {
             player.teleport(moonOverworld.getSpawnLocation());
         }
+        PlayerPercentages.oxygenPercentage.put(player.getUniqueId(), 99);
+        PlayerPercentages.oxygenDecimal.put(player.getUniqueId(), 99);
         return false;
     }
 
