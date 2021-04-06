@@ -74,6 +74,7 @@ public class CmdTaplMoon implements TabExecutor {
         }
         PlayerPercentages.oxygenPercentage.put(player.getUniqueId(), 99);
         PlayerPercentages.oxygenDecimal.put(player.getUniqueId(), 99);
+        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829085302106619914/MoonPack.zip");
         return false;
     }
 
@@ -148,6 +149,7 @@ public class CmdTaplMoon implements TabExecutor {
         } else {
             sender.sendMessage(prefix + " " + invalidUsageMsg);
         }
+        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829099560168849438/emptyRP.zip");
         return false;
     }
 
