@@ -26,6 +26,9 @@ public class TimeRunOut extends BukkitRunnable {
         for (Player player : Bukkit.getOnlinePlayers()){
             if (worldNames.contains(player.getWorld().getName())) {
                 UUID uuid = player.getUniqueId();
+                if (!PlayerPercentages.oxygenDecimal.containsKey(uuid)){
+                    PlayerPercentages.resetOxygen(uuid);
+                }
                 if (PlayerPercentages.oxygenDecimal.get(uuid) == 0 && PlayerPercentages.oxygenPercentage.get(uuid) == 0){
                     Location location = Bukkit.getWorld("world").getSpawnLocation();
                     player.getInventory().clear();

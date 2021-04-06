@@ -27,6 +27,9 @@ public class TimeDecrease extends BukkitRunnable {
         for (Player player : Bukkit.getOnlinePlayers()){
             if (worldNames.contains(player.getWorld().getName())){
                 UUID uuid = player.getUniqueId();
+                if (!PlayerPercentages.oxygenDecimal.containsKey(uuid)){
+                    PlayerPercentages.resetOxygen(uuid);
+                }
                 if (PlayerPercentages.oxygenDecimal.get(uuid) > 0){
                     PlayerPercentages.oxygenDecimal.put(uuid, PlayerPercentages.oxygenDecimal.get(uuid)-1);
                     if (PlayerPercentages.oxygenDecimal.get(uuid) == 0){
