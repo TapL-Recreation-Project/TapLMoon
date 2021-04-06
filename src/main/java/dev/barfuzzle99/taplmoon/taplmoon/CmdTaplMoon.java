@@ -100,9 +100,8 @@ public class CmdTaplMoon implements TabExecutor {
                 sender.sendMessage(prefix + ChatColor.YELLOW + " After creating the worlds, we'll have to kick all players to prevent a certain Minecraft");
                 sender.sendMessage(ChatColor.YELLOW + " bug. They will able to rejoin immediately. Do /taplmoon create confirm whenever you're ready.");
                 return false;
-            case 2: // no99chunks create confirm OR no99chunks create seed
+            case 2: // taplmoon create confirm
                 if (args[1].equals("confirm")) {
-                    // no99chunks create confirm
                     sender.sendMessage(prefix + ChatColor.GREEN + " World creation started");
                     new MoonWorldCreator(sender).createWorlds();
                 } else {
@@ -116,7 +115,7 @@ public class CmdTaplMoon implements TabExecutor {
     }
 
     public boolean cmdLeave(CommandSender sender, Command command, String label, String[] args) {
-        if (sender.isPermissionSet("TaplMoon.leave") && !sender.hasPermission("TaplMoon.leave")) {
+        if (sender.isPermissionSet("taplmoon.leave") && !sender.hasPermission("taplmoon.leave")) {
             sender.sendMessage(noPermsMsg);
             return false;
         }
@@ -126,7 +125,7 @@ public class CmdTaplMoon implements TabExecutor {
         }
         Player player = (Player) sender;
         if (!MoonWorldUtil.isMoonWorld(player.getWorld())) {
-            sender.sendMessage(prefix + ChatColor.YELLOW + " You can only leave from a world without 99% of the chunks");
+            sender.sendMessage(prefix + ChatColor.YELLOW + " You can only leave from a moon world");
             return false;
         }
 
@@ -154,7 +153,7 @@ public class CmdTaplMoon implements TabExecutor {
     }
 
     public boolean cmdHelp(CommandSender sender, Command command, String label, String[] args) {
-        if (sender.isPermissionSet("TaplMoon.help") && !sender.hasPermission("TaplMoon.help")) {
+        if (sender.isPermissionSet("taplmoon.help") && !sender.hasPermission("taplmoon.help")) {
             sender.sendMessage(noPermsMsg);
             return false;
         }

@@ -19,6 +19,7 @@ import net.minecraft.server.v1_16_R3.WorldGenStage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandSender;
@@ -89,6 +90,7 @@ public class MoonWorldCreator {
         applyMoonBiomeAppearance(moonPlains);
         addMoonBiomeStructures(moonPlains);
         addMoonBiomeOres(moonPlains);
+        addMoonOverworldMobs(moonPlains);
         moonPlains.setDepth(0.2f);
         moonPlains.setScale(0.025f);
 
@@ -100,6 +102,7 @@ public class MoonWorldCreator {
         applyMoonBiomeAppearance(moonHills);
         addMoonBiomeStructures(moonHills);
         addMoonBiomeOres(moonHills);
+        addMoonOverworldMobs(moonHills);
         moonHills.setDepth(0.2f);
         moonHills.setScale(0.4f);
 
@@ -170,12 +173,8 @@ public class MoonWorldCreator {
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_LAPIS);
     }
 
-    private void addMoonOverworldAnimals(CustomBiome moonBiome) {
-        // Minecraft defaults
-        moonBiome.addMobToBiome(EntityType.SHEEP, 12 ,4, 4);
-        moonBiome.addMobToBiome(EntityType.PIG, 10 ,4, 4);
-        moonBiome.addMobToBiome(EntityType.CHICKEN, 10 ,4, 4);
-        moonBiome.addMobToBiome(EntityType.COW, 8 ,4, 4);
+    private void addMoonOverworldMobs(CustomBiome moonBiome) {
+        // Minecraft defaults for monsters
         moonBiome.addMobToBiome(EntityType.SPIDER, 100 ,4, 4);
         moonBiome.addMobToBiome(EntityType.ZOMBIE, 95 ,4, 4);
         moonBiome.addMobToBiome(EntityType.ZOMBIE_VILLAGER, 5 ,4, 4);
@@ -183,7 +182,6 @@ public class MoonWorldCreator {
         moonBiome.addMobToBiome(EntityType.CREEPER, 100 ,4, 4);
         moonBiome.addMobToBiome(EntityType.SLIME, 100 ,4, 4);
         moonBiome.addMobToBiome(EntityType.ENDERMAN, 10 ,4, 4);
-        // moonBiome.addMobToBiome(EntityType.SQUID 12 ,4, 4) -- this is default, but we don't need it
         moonBiome.addMobToBiome(EntityType.WITCH, 5 ,4, 4);
     }
 
@@ -218,6 +216,7 @@ public class MoonWorldCreator {
         moonNetherBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_GOLD_NETHER);
         moonNetherBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_DEBRIS_SMALL);
         moonNetherBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_DEBRIS_LARGE);
+        moonNetherBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_QUARTZ_NETHER);
         moonNetherBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.SURFACE_STRUCTURES, BiomeDecoratorGroups.PATCH_FIRE);
 
         // Nether defaults
@@ -262,5 +261,9 @@ public class MoonWorldCreator {
         new WorldCreator("moon_the_end")
                 .environment(World.Environment.THE_END)
                 .createWorld();
+        Location spawnLoc = Bukkit.getWorld("moon_the_end").getSpawnLocation().clone();
+        spawnLoc.setX(spawnLoc.getBlockX() + 100);
+        spawnLoc.setY(spawnLoc.getBlockY() - 16);
+        Bukkit.getWorld("moon_the_end").setSpawnLocation(spawnLoc);
     }
 }
