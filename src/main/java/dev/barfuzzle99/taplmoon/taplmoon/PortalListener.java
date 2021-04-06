@@ -41,7 +41,7 @@ public class PortalListener implements Listener {
                     netherLoc.setWorld(nether);
                     event.setTo(netherLoc);
                 } else {
-                    World overworld = Bukkit.getWorld("moon_nether");
+                    World overworld = Bukkit.getWorld("moon");
                     if (overworld == null) {
                         TaplMoon.getInstance().getLogger().log(Level.SEVERE, "could not find 'moon', did you rename or delete the world?");
                         return;
