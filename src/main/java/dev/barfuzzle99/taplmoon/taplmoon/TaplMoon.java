@@ -1,4 +1,5 @@
 package dev.barfuzzle99.taplmoon.taplmoon;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TaplMoon extends JavaPlugin {
@@ -9,7 +10,20 @@ public final class TaplMoon extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        registerCommands();
+        registerListeners();
         initConfig();
+    }
+
+    public void registerListeners() {
+        Bukkit.getServer().getPluginManager().registerEvents(new RespawnListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PortalListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new AnimalSpawnerListener(), this);
+    }
+
+    public void registerCommands() {
+        this.getCommand("taplmoon").setExecutor(new CmdTaplMoon());
+        this.getCommand("taplmoon").setTabCompleter(new CmdTaplMoon());
     }
 
     public void initConfig() {

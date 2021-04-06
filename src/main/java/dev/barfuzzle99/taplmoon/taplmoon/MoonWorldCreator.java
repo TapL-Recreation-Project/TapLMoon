@@ -1,7 +1,6 @@
 package dev.barfuzzle99.taplmoon.taplmoon;
 
 import de.freesoccerhdx.advancedworldcreator.biomegenerators.MultiNoiseBiomeGenerator;
-import de.freesoccerhdx.advancedworldcreator.biomegenerators.OverworldBiomeGenerator;
 import de.freesoccerhdx.advancedworldcreator.main.AdvancedCreator;
 import de.freesoccerhdx.advancedworldcreator.main.AdvancedWorldCreatorAPI;
 import de.freesoccerhdx.advancedworldcreator.main.CustomBiome;
@@ -12,22 +11,24 @@ import de.freesoccerhdx.advancedworldcreator.wrapper.SurfaceType;
 import de.freesoccerhdx.advancedworldcreator.wrapper.WorldGenCarver;
 import net.minecraft.server.v1_16_R3.BiomeBase;
 import net.minecraft.server.v1_16_R3.BiomeDecoratorGroups;
-import net.minecraft.server.v1_16_R3.Biomes;
 import net.minecraft.server.v1_16_R3.Block;
 import net.minecraft.server.v1_16_R3.Blocks;
+import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.NoiseSettings;
-import net.minecraft.server.v1_16_R3.ResourceKey;
 import net.minecraft.server.v1_16_R3.WorldGenStage;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.awt.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.OptionalLong;
+
 
 public class MoonWorldCreator {
 
@@ -38,55 +39,127 @@ public class MoonWorldCreator {
     }
 
     public void createWorlds() {
-        whoCreated.sendMessage("[TapLMoon] Creating world ''moon'' (1/3)");
-        createOverworld();
-        whoCreated.sendMessage("[TapLMoon] Creating world ''moon_nether'' (2/3)");
-        createNether();
-        whoCreated.sendMessage("[TapLMoon] Creating world ''moon_the_end'' (3/3)");
-        createTheEnd();
-        // Kick players to force their clients to know about the newly created biomes
-        // Workaround for https://bugs.mojang.com/browse/MC-197616
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.kickPlayer("We had to disconnect you for some maintenance, but you can re-log now");
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                whoCreated.sendMessage("[TapLMoon] Creating world ''moon'' (1/3)");
+                createOverworld();
+            }
+        }.runTaskLater(TaplMoon.getInstance(), 0);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                whoCreated.sendMessage("[TapLMoon] Creating world ''moon_nether'' (2/3)");
+                createNether();
+            }
+        }.runTaskLater(TaplMoon.getInstance(), 1);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                whoCreated.sendMessage("[TapLMoon] Creating world ''moon_the_end'' (3/3)");
+                createTheEnd();
+                // Kick players to force their clients to know about the newly created biomes
+                // on re-log. Workaround for https://bugs.mojang.com/browse/MC-197616
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.kickPlayer(ChatColor.GREEN + "[TapLMoon] ✔ World creation done! You can re-log now");
+                }
+            }
+        }.runTaskLater(TaplMoon.getInstance(), 2);
     }
 
     final Color GRASS_COLOR = new Color(250,250,140);
-    final Color FOLIAGE_COLOR = new Color(250,250,140);
+    final Color FOLIAGE_COLOR = new Color(60,100,170);
     final Color WATER_COLOR = new Color(220,220,220);
 
     private void createOverworld() {
+        // World settings
+        //
         AdvancedCreator advancedCreator = new AdvancedCreator("moon");
         advancedCreator.setSeed(Bukkit.getWorlds().get(0).getSeed());
-        CustomBiome moonBiome = new CustomBiome("tapl_moon", "moon");
+        NoiseSettings noiseSettings = PresetNoiseSettings.OVERWORLD;
 
-        // Appearance
+        advancedCreator.setGenerateStructures(true);
+        MultiNoiseBiomeGenerator.CREATOR multiNoiseBiomeCreator = new MultiNoiseBiomeGenerator.CREATOR(advancedCreator.getSeed());
+
+        // Moon plains
         //
+        CustomBiome moonPlains = new CustomBiome("tapl_moon", "moon_plains");
+        applyMoonBiomeAppearance(moonPlains);
+        addMoonBiomeStructures(moonPlains);
+        addMoonBiomeOres(moonPlains);
+        moonPlains.setDepth(0.2f);
+        moonPlains.setScale(0.025f);
+
+        RegisteredCustomBiome registeredMoonBiome = AdvancedWorldCreatorAPI.registerCustomBiome(moonPlains, false);
+
+        // Moon Hills
+        //
+        CustomBiome moonHills = new CustomBiome("tapl_moon", "moon_hills");
+        applyMoonBiomeAppearance(moonHills);
+        addMoonBiomeStructures(moonHills);
+        addMoonBiomeOres(moonHills);
+        moonHills.setDepth(0.2f);
+        moonHills.setScale(0.4f);
+
+        RegisteredCustomBiome registeredMoonHills = AdvancedWorldCreatorAPI.registerCustomBiome(moonHills, false);
+
+        // Moon crater
+        //
+        CustomBiome moonCrater = new CustomBiome("tapl_moon", "moon_crater");
+        for (int i = 0; i < 10; i ++) {
+            moonCrater.addWorldGenFeature(WorldGenStage.Features.AIR, WorldGenCarver.NETHER_CAVE);
+        }
+        moonCrater.setCustomSurfaceBuilder(SurfaceType.DEFAULT, Blocks.END_STONE, Blocks.STONE, Blocks.STONE);
+        moonCrater.setDepth(-1.0f);
+        moonCrater.setScale(0.01f);
+
+        RegisteredCustomBiome registeredMoonCrater = AdvancedWorldCreatorAPI.registerCustomBiome(moonCrater, false);
+
+        // World creation
+        //
+        final Block solidMaterial = Blocks.STONE;
+        final Block fluidMaterial = Blocks.VOID_AIR;
+        final int bedrockRoofPosition = -10;
+        final int bedrockFloorPosition = 0;
+        final int seaLevel = 1;
+        final boolean disableMobGeneration = false;
+
+        multiNoiseBiomeCreator.addBiome(registeredMoonCrater, 0.0f, 0.0f, 0.1f, 1.0f, 0.5f);
+        multiNoiseBiomeCreator.addBiome(registeredMoonBiome, 0.0f, 0.0f, 0.2f, 1.0f, 0.0f);
+        multiNoiseBiomeCreator.addBiome(registeredMoonHills, 0.0f, 0.0f, 0.8f, 0.0f, 0.7f);
+
+        advancedCreator.loadDefaultStructureGeneratorConfig();
+        advancedCreator.setCustomWorldSetting(noiseSettings, solidMaterial, fluidMaterial,
+                bedrockRoofPosition, bedrockFloorPosition, seaLevel, disableMobGeneration);
+
+        AdvancedWorldCreatorAPI.createWorld(advancedCreator, CustomDimensionSettings.getOverworldSettings(), multiNoiseBiomeCreator.create());
+        // Not using CustomDimensionSettings to do that because it prevents the
+        // creation of nether portals
+        Bukkit.getWorld("moon").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        Bukkit.getWorld("moon").setTime(14500);
+    }
+
+    private void applyMoonBiomeAppearance(CustomBiome moonBiome) {
         moonBiome.setGrassColor(GRASS_COLOR);
         moonBiome.setFoliageColor(FOLIAGE_COLOR);
         moonBiome.setWaterColor(WATER_COLOR);
         moonBiome.setPrecipitation(BiomeBase.Precipitation.SNOW);
         moonBiome.setCustomSurfaceBuilder(SurfaceType.DEFAULT, Blocks.END_STONE, Blocks.STONE, Blocks.STONE);
-        moonBiome.setDepth(0.0225f);
-        moonBiome.setScale(0.025f);
+        moonBiome.setTemperature(0.1f);
+    }
 
-        /* TODO: OPTIONALS
-            moonBiome.setFogColor(new Color(255, 200, 20));
-            moonBiome.setSkyColor(new Color(255, 200, 20));
-            moonBiome.setBiomeParticles(Particles.ASH, 0.2f);
-        */
-
-        // Structures and carvers
-        //
+    private void addMoonBiomeStructures(CustomBiome moonBiome) {
         moonBiome.addBiomeStructure(BiomeStructure.VILLAGE_PLAINS);
         moonBiome.addBiomeStructure(BiomeStructure.STRONGHOLD);
         moonBiome.addBiomeStructure(BiomeStructure.MINESHAFT);
         moonBiome.addBiomeStructure(BiomeStructure.RUINED_PORTAL);
         moonBiome.addWorldGenFeature(WorldGenStage.Features.AIR, WorldGenCarver.CAVE);
-        advancedCreator.loadDefaultStructureGeneratorConfig();
+        moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.LAKES, BiomeDecoratorGroups.LAKE_LAVA);
+    }
 
-        // Ores
-        //
+    private void addMoonBiomeOres(CustomBiome moonBiome) {
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_COAL);
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_GOLD);
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_EMERALD);
@@ -95,9 +168,10 @@ public class MoonWorldCreator {
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_IRON);
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_REDSTONE);
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_LAPIS);
+    }
 
-        // Note to self: spawn passive mobs manually, they won't spawn on end stone
-        // Mostly Minecraft defaults
+    private void addMoonOverworldAnimals(CustomBiome moonBiome) {
+        // Minecraft defaults
         moonBiome.addMobToBiome(EntityType.SHEEP, 12 ,4, 4);
         moonBiome.addMobToBiome(EntityType.PIG, 10 ,4, 4);
         moonBiome.addMobToBiome(EntityType.CHICKEN, 10 ,4, 4);
@@ -111,43 +185,12 @@ public class MoonWorldCreator {
         moonBiome.addMobToBiome(EntityType.ENDERMAN, 10 ,4, 4);
         // moonBiome.addMobToBiome(EntityType.SQUID 12 ,4, 4) -- this is default, but we don't need it
         moonBiome.addMobToBiome(EntityType.WITCH, 5 ,4, 4);
-
-        RegisteredCustomBiome registeredMoonBiome = AdvancedWorldCreatorAPI.registerCustomBiome(moonBiome, false);
-        OverworldBiomeGenerator.CREATOR obgCreator = new OverworldBiomeGenerator.CREATOR(advancedCreator.getSeed());
-        NoiseSettings noiseSettings = PresetNoiseSettings.OVERWORLD;
-
-        // All biomes
-        //
-        Field[] fields = Biomes.class.getDeclaredFields();
-        for (Field f : fields) {
-            if (Modifier.isStatic(f.getModifiers()) && f.getType().equals(Biomes.PLAINS.getClass())) {
-                try {
-                    obgCreator.overwriteBiome((ResourceKey<BiomeBase>) f.get(null), registeredMoonBiome);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        // World settings
-        //
-        final Block solidMaterial = Blocks.STONE;
-        final Block fluidMaterial = Blocks.WATER;
-        final int bedrockRoofPosition = -10;
-        final int bedrockFloorPosition = 0;
-        final int seaLevel = 1;
-        final boolean disableMobGeneration = false;
-
-        advancedCreator.setGenerateStructures(true);
-        advancedCreator.setCustomWorldSetting(noiseSettings, solidMaterial, fluidMaterial,
-                bedrockRoofPosition, bedrockFloorPosition, seaLevel, disableMobGeneration);
-
-        AdvancedWorldCreatorAPI.createWorld(advancedCreator, CustomDimensionSettings.getOverworldSettings(), obgCreator.create());
     }
 
     private void createNether() {
         AdvancedCreator advancedCreator = new AdvancedCreator("moon_nether");
         CustomBiome moonNetherBiome = new CustomBiome("tapl_moon", "moon_nether_wastes");
+        advancedCreator.setGenerateStructures(true);
 
         // Appearance
         //
@@ -209,7 +252,6 @@ public class MoonWorldCreator {
         final int seaLevel = 32;
         final boolean disableMobGeneration = false;
 
-        advancedCreator.setGenerateStructures(true);
         advancedCreator.setCustomWorldSetting(noiseSettings, solidMaterial, fluidMaterial,
                 bedrockRoofPosition, bedrockFloorPosition, seaLevel, disableMobGeneration);
 

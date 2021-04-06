@@ -1,5 +1,6 @@
 package dev.barfuzzle99.taplmoon.taplmoon;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,11 +19,9 @@ public class RespawnListener implements Listener {
         }
 
         if (!MoonWorldUtil.isMoonWorld(event.getRespawnLocation().getWorld())) {
-            for (World world : MoonWorldUtil.getMoonWorlds()) {
-                if (world.getEnvironment() == World.Environment.NORMAL) {
-                    event.setRespawnLocation(world.getSpawnLocation());
-                    return;
-                }
+            World moonOverworld = Bukkit.getWorld("moon");
+            if (moonOverworld != null) {
+                event.setRespawnLocation(moonOverworld.getSpawnLocation());
             }
         }
     }

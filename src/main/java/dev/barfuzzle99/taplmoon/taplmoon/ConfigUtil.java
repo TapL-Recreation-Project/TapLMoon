@@ -47,7 +47,7 @@ public class ConfigUtil {
     }
 
     public static void savePlayerLastNo99WorldLoc(Player player, Location loc) {
-        TaplMoon.getPlayerLastLocationsYml().yamlConfig().set(player.getName() + ".lastNo99WorldPos", stringListFromLocation(loc));
+        TaplMoon.getPlayerLastLocationsYml().yamlConfig().set(player.getName() + ".lastMoonWorldPos", stringListFromLocation(loc));
         TaplMoon.getPlayerLastLocationsYml().saveChanges();
     }
 
@@ -58,7 +58,7 @@ public class ConfigUtil {
 
     @Nullable
     public static Location getPlayerLastNo99WorldLoc(Player player) {
-        List<String> ret = TaplMoon.getPlayerLastLocationsYml().yamlConfig().getStringList(player.getName() + ".lastNo99WorldPos");
+        List<String> ret = TaplMoon.getPlayerLastLocationsYml().yamlConfig().getStringList(player.getName() + ".lastMoonWorldPos");
         return locationFromStringList(ret);
     }
 

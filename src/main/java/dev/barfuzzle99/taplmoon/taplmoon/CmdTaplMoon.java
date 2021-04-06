@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 
 public class CmdTaplMoon implements TabExecutor {
@@ -57,23 +56,20 @@ public class CmdTaplMoon implements TabExecutor {
         }
         Player player = (Player) sender;
         if (MoonWorldUtil.getMoonWorlds().size() == 0) {
-            sender.sendMessage(prefix + ChatColor.YELLOW + " No worlds created yet!");
+            sender.sendMessage(prefix + ChatColor.YELLOW + " No moon worlds created yet!");
             return false;
         }
         if (MoonWorldUtil.isMoonWorld(player.getWorld())) {
-            sender.sendMessage(prefix + ChatColor.YELLOW + " You're already in a world without 99% of the chunks!");
+            sender.sendMessage(prefix + ChatColor.YELLOW + " You're already in a moon world!");
             return false;
         }
-        for (World moonWorld : MoonWorldUtil.getMoonWorlds()) {
-            if (moonWorld.getEnvironment() == World.Environment.NORMAL) {
-                ConfigUtil.savePlayerLastNormalWorldLoc(player, player.getLocation());
-                Location lastNo99WorldLoc = ConfigUtil.getPlayerLastNo99WorldLoc(player);
-                if (lastNo99WorldLoc != null && lastNo99WorldLoc.getWorld() != null) {
-                    player.teleport(lastNo99WorldLoc);
-                } else {
-                    player.teleport(moonWorld.getSpawnLocation());
-                }
-            }
+        World moonOverworld = Bukkit.getWorld("moon");
+        ConfigUtil.savePlayerLastNormalWorldLoc(player, player.getLocation());
+        Location lastMoonWorldLoc = ConfigUtil.getPlayerLastNo99WorldLoc(player);
+        if (lastMoonWorldLoc != null && lastMoonWorldLoc.getWorld() != null) {
+            player.teleport(lastMoonWorldLoc);
+        } else {
+            player.teleport(moonOverworld.getSpawnLocation());
         }
         return false;
     }
@@ -211,7 +207,7 @@ public class CmdTaplMoon implements TabExecutor {
     }
 
     static void deleteFolder(File dir) {
-        for (File subFile : Objects.requireNonNull(dir.listFiles())) {
+        for (File subFile : dir.listFiles()) {
             if (subFile.isDirectory()) {
                 deleteFolder(subFile);
             } else {
