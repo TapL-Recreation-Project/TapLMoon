@@ -10,7 +10,7 @@ public class JoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
         if (player.getWorld().getName().contains("moon")){
-            player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829186434341797888/MoonPack.zip");
+            player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829189970664488980/MoonPack.zip");
         }
     }
 }
