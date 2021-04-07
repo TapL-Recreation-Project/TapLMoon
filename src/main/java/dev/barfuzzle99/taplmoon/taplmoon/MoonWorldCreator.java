@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.awt.*;
-import java.util.OptionalLong;
 
 
 public class MoonWorldCreator {
@@ -148,7 +147,7 @@ public class MoonWorldCreator {
         moonBiome.setGrassColor(GRASS_COLOR);
         moonBiome.setFoliageColor(FOLIAGE_COLOR);
         moonBiome.setWaterColor(WATER_COLOR);
-        moonBiome.setPrecipitation(BiomeBase.Precipitation.SNOW);
+        moonBiome.setPrecipitation(BiomeBase.Precipitation.NONE);
         moonBiome.setCustomSurfaceBuilder(SurfaceType.DEFAULT, Blocks.END_STONE, Blocks.STONE, Blocks.STONE);
         moonBiome.setTemperature(0.1f);
     }

@@ -10,7 +10,7 @@ public class MoonWorldUtil {
     public static List<World> getMoonWorlds() {
         ArrayList<World> ret = new ArrayList<>();
         for (World world : Bukkit.getWorlds()) {
-            if (world.getName().contains("moon")) {
+            if (isMoonWorld(world)) {
                 ret.add(world);
             }
         }
