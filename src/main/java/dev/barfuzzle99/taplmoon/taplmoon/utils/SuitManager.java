@@ -38,9 +38,9 @@ public class SuitManager {
 
     public static void giveSpaceSuit(Player player){
 
-        ItemStack chestplate = new ItemStack(Material.IRON_CHESTPLATE);
-        ItemStack leggings = new ItemStack(Material.IRON_LEGGINGS);
-        ItemStack boots = new ItemStack(Material.IRON_BOOTS);
+        ItemStack chestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+        ItemStack leggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+        ItemStack boots = new ItemStack(Material.CHAINMAIL_BOOTS);
 
         ItemMeta chestmeta = chestplate.getItemMeta();
         ItemMeta legsmeta = leggings.getItemMeta();

@@ -50,7 +50,7 @@ public final class TaplMoon extends JavaPlugin {
     }
 
     private static void registerCobbleRecipe(TaplMoon plugin) {
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "moon_cobblestone"), new ItemStack(Material.COBBLESTONE))
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "moon_cobblestone"), new ItemStack(Material.COBBLESTONE, 4))
                 .shape("AAA", "AAA", "AAA")
                 .setIngredient('A', Material.END_STONE);
         Bukkit.addRecipe(recipe);
