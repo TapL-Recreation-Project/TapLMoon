@@ -13,7 +13,10 @@ public class AnimalSpawnerListener implements Listener {
 
     @EventHandler
     public void onChunkGen(ChunkLoadEvent event) {
-        final int ANIMAL_RARITY = 150;
+        if (!event.getWorld().getName().equals("moon")) {
+            return;
+        }
+        final int ANIMAL_RARITY = 100;
 
         EntityType[] allowedAnimals = new EntityType[] {
                 EntityType.COW, EntityType.CHICKEN, EntityType.SHEEP, EntityType.HORSE, EntityType.PIG, EntityType.LLAMA, EntityType.RABBIT

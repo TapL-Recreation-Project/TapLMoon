@@ -24,16 +24,24 @@ public final class TaplMoon extends JavaPlugin {
         registerRunnables();
         registerCobbleRecipe(this);
         initConfig();
+        initWorlds();
     }
 
-    public void registerListeners() {
+    // TODO: not always do all worlds need to be initialized
+    private void initWorlds() {
+        if (MoonWorldUtil.areThereMoonWorlds()) {
+            MoonWorldCreator.forceLoadWorlds();
+        }
+    }
+
+    private void registerListeners() {
         Bukkit.getServer().getPluginManager().registerEvents(new RespawnListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PortalListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new AnimalSpawnerListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
-    public void registerRunnables(){
+    private void registerRunnables(){
         BukkitTask LowGravity = new LowGravity().runTaskTimer(this, 1, 1);
         BukkitTask ReplaceNearbyBlocks = new ReplaceNearbyBlocks().runTaskTimer(this, 1, 1);
         BukkitTask TimeDecrease = new TimeDecrease().runTaskTimer(this, 10, 10);

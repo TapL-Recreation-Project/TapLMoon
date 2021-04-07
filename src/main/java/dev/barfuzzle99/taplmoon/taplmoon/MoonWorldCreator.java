@@ -154,10 +154,10 @@ public class MoonWorldCreator {
         moonBiome.setWaterColor(WATER_COLOR);
         moonBiome.setPrecipitation(BiomeBase.Precipitation.NONE);
         moonBiome.setCustomSurfaceBuilder(SurfaceType.DEFAULT, Blocks.END_STONE, Blocks.STONE, Blocks.STONE);
-        moonBiome.setTemperature(0.1f);
+        moonBiome.setTemperature(0.5f);
     }
 
-    private static final void addMoonBiomeStructures(CustomBiome moonBiome) {
+    private static void addMoonBiomeStructures(CustomBiome moonBiome) {
         moonBiome.addBiomeStructure(BiomeStructure.VILLAGE_PLAINS);
         moonBiome.addBiomeStructure(BiomeStructure.STRONGHOLD);
         moonBiome.addBiomeStructure(BiomeStructure.MINESHAFT);
@@ -166,7 +166,7 @@ public class MoonWorldCreator {
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.LAKES, BiomeDecoratorGroups.LAKE_LAVA);
     }
 
-    private static final void addMoonBiomeOres(CustomBiome moonBiome) {
+    private static void addMoonBiomeOres(CustomBiome moonBiome) {
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_COAL);
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_GOLD);
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_EMERALD);
