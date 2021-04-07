@@ -56,9 +56,13 @@ public class CmdTaplMoon implements TabExecutor {
             return false;
         }
         Player player = (Player) sender;
-        if (MoonWorldUtil.getMoonWorlds().size() == 0) {
-            sender.sendMessage(prefix + ChatColor.YELLOW + " No moon worlds created yet!");
-            return false;
+        if (MoonWorldUtil.getLoadedMoonWorlds().size() == 0) {
+            if (MoonWorldUtil.areThereMoonWorlds()) {
+                MoonWorldCreator.forceLoadWorlds();
+            } else {
+                sender.sendMessage(prefix + ChatColor.YELLOW + " No moon worlds created yet!");
+                return false;
+            }
         }
         if (MoonWorldUtil.isMoonWorld(player.getWorld())) {
             sender.sendMessage(prefix + ChatColor.YELLOW + " You're already in a moon world!");
@@ -91,7 +95,7 @@ public class CmdTaplMoon implements TabExecutor {
         }
         */
 
-        if (MoonWorldUtil.getMoonWorlds().size() > 0) {
+        if (MoonWorldUtil.getLoadedMoonWorlds().size() > 0) {
             sender.sendMessage(prefix + ChatColor.YELLOW + " You've already created moon worlds!");
             return false;
         }

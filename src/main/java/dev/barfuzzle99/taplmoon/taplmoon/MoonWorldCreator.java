@@ -13,7 +13,6 @@ import net.minecraft.server.v1_16_R3.BiomeBase;
 import net.minecraft.server.v1_16_R3.BiomeDecoratorGroups;
 import net.minecraft.server.v1_16_R3.Block;
 import net.minecraft.server.v1_16_R3.Blocks;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.NoiseSettings;
 import net.minecraft.server.v1_16_R3.WorldGenStage;
 import org.bukkit.Bukkit;
@@ -36,6 +35,12 @@ public class MoonWorldCreator {
 
     public MoonWorldCreator(CommandSender whoCreated) {
         this.whoCreated = whoCreated;
+    }
+
+    public static void forceLoadWorlds() {
+        createOverworld();
+        createNether();
+        createTheEnd();
     }
 
     public void createWorlds() {
@@ -69,11 +74,11 @@ public class MoonWorldCreator {
         }.runTaskLater(TaplMoon.getInstance(), 2);
     }
 
-    final Color GRASS_COLOR = new Color(250,250,140);
-    final Color FOLIAGE_COLOR = new Color(60,100,170);
-    final Color WATER_COLOR = new Color(220,220,220);
+    private static final Color GRASS_COLOR = new Color(250,250,140);
+    private static final Color FOLIAGE_COLOR = new Color(60,100,170);
+    private static final Color WATER_COLOR = new Color(220,220,220);
 
-    private void createOverworld() {
+    private static void createOverworld() {
         // World settings
         //
         AdvancedCreator advancedCreator = new AdvancedCreator("moon");
@@ -143,7 +148,7 @@ public class MoonWorldCreator {
         Bukkit.getWorld("moon").setTime(14500);
     }
 
-    private void applyMoonBiomeAppearance(CustomBiome moonBiome) {
+    private static void applyMoonBiomeAppearance(CustomBiome moonBiome) {
         moonBiome.setGrassColor(GRASS_COLOR);
         moonBiome.setFoliageColor(FOLIAGE_COLOR);
         moonBiome.setWaterColor(WATER_COLOR);
@@ -152,7 +157,7 @@ public class MoonWorldCreator {
         moonBiome.setTemperature(0.1f);
     }
 
-    private void addMoonBiomeStructures(CustomBiome moonBiome) {
+    private static final void addMoonBiomeStructures(CustomBiome moonBiome) {
         moonBiome.addBiomeStructure(BiomeStructure.VILLAGE_PLAINS);
         moonBiome.addBiomeStructure(BiomeStructure.STRONGHOLD);
         moonBiome.addBiomeStructure(BiomeStructure.MINESHAFT);
@@ -161,7 +166,7 @@ public class MoonWorldCreator {
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.LAKES, BiomeDecoratorGroups.LAKE_LAVA);
     }
 
-    private void addMoonBiomeOres(CustomBiome moonBiome) {
+    private static final void addMoonBiomeOres(CustomBiome moonBiome) {
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_COAL);
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_GOLD);
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_EMERALD);
@@ -172,7 +177,7 @@ public class MoonWorldCreator {
         moonBiome.addWorldGenDecorationFeature(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeDecoratorGroups.ORE_LAPIS);
     }
 
-    private void addMoonOverworldMobs(CustomBiome moonBiome) {
+    private static final void addMoonOverworldMobs(CustomBiome moonBiome) {
         // Minecraft defaults for monsters
         moonBiome.addMobToBiome(EntityType.SPIDER, 100 ,4, 4);
         moonBiome.addMobToBiome(EntityType.ZOMBIE, 95 ,4, 4);
@@ -184,7 +189,7 @@ public class MoonWorldCreator {
         moonBiome.addMobToBiome(EntityType.WITCH, 5 ,4, 4);
     }
 
-    private void createNether() {
+    private static final void createNether() {
         AdvancedCreator advancedCreator = new AdvancedCreator("moon_nether");
         CustomBiome moonNetherBiome = new CustomBiome("tapl_moon", "moon_nether_wastes");
         advancedCreator.setGenerateStructures(true);
@@ -256,7 +261,7 @@ public class MoonWorldCreator {
         AdvancedWorldCreatorAPI.createWorld(advancedCreator, CustomDimensionSettings.getNetherSettings(), biomeGenerator);
     }
 
-    private void createTheEnd() {
+    private static final void createTheEnd() {
         new WorldCreator("moon_the_end")
                 .environment(World.Environment.THE_END)
                 .createWorld();
