@@ -4,6 +4,10 @@ import dev.barfuzzle99.taplmoon.taplmoon.runnables.ReplaceNearbyBlocks;
 import dev.barfuzzle99.taplmoon.taplmoon.runnables.TimeDecrease;
 import dev.barfuzzle99.taplmoon.taplmoon.runnables.TimeRunOut;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -21,6 +25,7 @@ public final class TaplMoon extends JavaPlugin {
         registerCommands();
         registerListeners();
         registerRunnables();
+        registerCobbleRecipe(this);
         initConfig();
     }
 
@@ -35,6 +40,13 @@ public final class TaplMoon extends JavaPlugin {
         BukkitTask ReplaceNearbyBlocks = new ReplaceNearbyBlocks().runTaskTimer(this, 1, 1);
         BukkitTask TimeDecrease = new TimeDecrease().runTaskTimer(this, 20, 20);
         BukkitTask TimeRunOut = new TimeRunOut().runTaskTimer(this, 20, 20);
+    }
+
+    private static void registerCobbleRecipe(TaplMoon plugin) {
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "moon_cobblestone"), new ItemStack(Material.COBBLESTONE))
+                .shape("AAA", "AAA", "AAA")
+                .setIngredient('A', Material.END_STONE);
+        Bukkit.addRecipe(recipe);
     }
 
     public void registerCommands() {
