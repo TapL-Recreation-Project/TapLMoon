@@ -33,6 +33,7 @@ public final class TaplMoon extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new RespawnListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PortalListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new AnimalSpawnerListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
     public void registerRunnables(){
