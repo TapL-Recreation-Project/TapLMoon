@@ -1,8 +1,5 @@
 package dev.barfuzzle99.taplmoon.taplmoon;
-import dev.barfuzzle99.taplmoon.taplmoon.runnables.LowGravity;
-import dev.barfuzzle99.taplmoon.taplmoon.runnables.ReplaceNearbyBlocks;
-import dev.barfuzzle99.taplmoon.taplmoon.runnables.TimeDecrease;
-import dev.barfuzzle99.taplmoon.taplmoon.runnables.TimeRunOut;
+import dev.barfuzzle99.taplmoon.taplmoon.runnables.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -39,8 +36,9 @@ public final class TaplMoon extends JavaPlugin {
     public void registerRunnables(){
         BukkitTask LowGravity = new LowGravity().runTaskTimer(this, 1, 1);
         BukkitTask ReplaceNearbyBlocks = new ReplaceNearbyBlocks().runTaskTimer(this, 1, 1);
-        BukkitTask TimeDecrease = new TimeDecrease().runTaskTimer(this, 20, 20);
-        BukkitTask TimeRunOut = new TimeRunOut().runTaskTimer(this, 20, 20);
+        BukkitTask TimeDecrease = new TimeDecrease().runTaskTimer(this, 10, 10);
+        BukkitTask TimeRunOut = new TimeRunOut().runTaskTimer(this, 10, 10);
+        BukkitTask SuitCheck = new SuitCheck().runTaskTimer(this, 10, 10);
     }
 
     private static void registerCobbleRecipe(TaplMoon plugin) {
