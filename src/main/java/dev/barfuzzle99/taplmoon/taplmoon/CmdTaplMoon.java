@@ -1,6 +1,7 @@
 package dev.barfuzzle99.taplmoon.taplmoon;
 
 import dev.barfuzzle99.taplmoon.taplmoon.stored.PlayerPercentages;
+import dev.barfuzzle99.taplmoon.taplmoon.utils.SuitManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -74,7 +75,8 @@ public class CmdTaplMoon implements TabExecutor {
         }
         PlayerPercentages.oxygenPercentage.put(player.getUniqueId(), 99);
         PlayerPercentages.oxygenDecimal.put(player.getUniqueId(), 99);
-        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829108595315834910/MoonPack.zip");
+        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829186434341797888/MoonPack.zip");
+        SuitManager.giveSpaceSuit(player);
         return false;
     }
 
