@@ -86,7 +86,7 @@ public class CmdTaplMoon implements TabExecutor {
             }
             PlayerPercentages.oxygenPercentage.put(others.getUniqueId(), 99);
             PlayerPercentages.oxygenDecimal.put(others.getUniqueId(), 99);
-            others.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829441177031540757/MoonPack.zip");
+            others.setResourcePack("https://www.dropbox.com/s/oltfoub9xywjm1a/MoonPack%20%281%29.zip?dl=1");
             SuitManager.giveSpaceSuit(others);
         }
         return false;
@@ -124,7 +124,7 @@ public class CmdTaplMoon implements TabExecutor {
         }
         PlayerPercentages.oxygenPercentage.put(player.getUniqueId(), 99);
         PlayerPercentages.oxygenDecimal.put(player.getUniqueId(), 99);
-        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829441177031540757/MoonPack.zip");
+        player.setResourcePack("https://www.dropbox.com/s/oltfoub9xywjm1a/MoonPack%20%281%29.zip?dl=1");
         SuitManager.giveSpaceSuit(player);
         return false;
     }
@@ -199,7 +199,7 @@ public class CmdTaplMoon implements TabExecutor {
         } else {
             sender.sendMessage(prefix + " " + invalidUsageMsg);
         }
-        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829099560168849438/emptyRP.zip");
+        player.setResourcePack("https://www.dropbox.com/s/c56b7jk8ctlaux1/emptyRP.zip?dl=1");
         return false;
     }
 
