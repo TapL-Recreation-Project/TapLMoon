@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -76,18 +77,7 @@ public class CmdTaplMoon implements TabExecutor {
                 others.sendMessage(prefix + ChatColor.YELLOW + " You're already in a moon world!");
                 continue;
             }
-            World moonOverworld = Bukkit.getWorld("moon");
-            ConfigUtil.savePlayerLastNormalWorldLoc(others, others.getLocation());
-            Location lastMoonWorldLoc = ConfigUtil.getPlayerLastMoonWorldLoc(others);
-            if (lastMoonWorldLoc != null && lastMoonWorldLoc.getWorld() != null) {
-                others.teleport(lastMoonWorldLoc);
-            } else {
-                others.teleport(moonOverworld.getSpawnLocation());
-            }
-            PlayerPercentages.oxygenPercentage.put(others.getUniqueId(), 99);
-            PlayerPercentages.oxygenDecimal.put(others.getUniqueId(), 99);
-            others.setResourcePack("https://www.dropbox.com/s/oltfoub9xywjm1a/MoonPack%20%281%29.zip?dl=1");
-            SuitManager.giveSpaceSuit(others);
+            teleportToTheMoon(others);
         }
         return false;
     }
@@ -114,6 +104,11 @@ public class CmdTaplMoon implements TabExecutor {
             sender.sendMessage(prefix + ChatColor.YELLOW + " You're already in a moon world!");
             return false;
         }
+        teleportToTheMoon(player);
+        return false;
+    }
+
+    private void teleportToTheMoon(Player player) {
         World moonOverworld = Bukkit.getWorld("moon");
         ConfigUtil.savePlayerLastNormalWorldLoc(player, player.getLocation());
         Location lastMoonWorldLoc = ConfigUtil.getPlayerLastMoonWorldLoc(player);
@@ -124,9 +119,14 @@ public class CmdTaplMoon implements TabExecutor {
         }
         PlayerPercentages.oxygenPercentage.put(player.getUniqueId(), 99);
         PlayerPercentages.oxygenDecimal.put(player.getUniqueId(), 99);
-        player.setResourcePack("https://www.dropbox.com/s/oltfoub9xywjm1a/MoonPack%20%281%29.zip?dl=1");
+        byte[] sha1hash = null;
+        try {
+            sha1hash = new sun.misc.BASE64Decoder().decodeBuffer("15C9043AA613A538A88E706CC402DAC65D56DB67".toLowerCase());
+        } catch (IOException ex) { // TODO: it's eventually going to be ignored
+            ex.printStackTrace(); // TODO: debug
+        }
+        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829441177031540757/MoonPack.zip", sha1hash);
         SuitManager.giveSpaceSuit(player);
-        return false;
     }
 
     public boolean cmdCreate(CommandSender sender, Command command, String label, String[] args) {
