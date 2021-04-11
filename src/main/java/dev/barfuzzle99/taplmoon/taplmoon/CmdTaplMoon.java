@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -119,12 +120,7 @@ public class CmdTaplMoon implements TabExecutor {
         }
         PlayerPercentages.oxygenPercentage.put(player.getUniqueId(), 99);
         PlayerPercentages.oxygenDecimal.put(player.getUniqueId(), 99);
-        byte[] sha1hash = null;
-        try {
-            sha1hash = new sun.misc.BASE64Decoder().decodeBuffer("15C9043AA613A538A88E706CC402DAC65D56DB67".toLowerCase());
-        } catch (IOException ex) { // TODO: it's eventually going to be ignored
-            ex.printStackTrace(); // TODO: debug
-        }
+        byte[] sha1hash = Base64.decodeBase64("15c9043aa613a538a88e706cc402dac65d56db67");
         player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829441177031540757/MoonPack.zip", sha1hash);
         SuitManager.giveSpaceSuit(player);
     }
