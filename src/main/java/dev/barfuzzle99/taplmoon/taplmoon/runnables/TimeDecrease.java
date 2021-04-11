@@ -37,7 +37,6 @@ public class TimeDecrease extends BukkitRunnable {
                         PlayerPercentages.oxygenPercentage.put(uuid, PlayerPercentages.oxygenPercentage.get(uuid)-1);
                     }
                 }
-                SendTitleBarMessage.sendMessage(player, ChatColor.RED.toString()+ChatColor.BOLD+"Oxygen Left:", PlayerPercentages.oxygenDecimal.get(uuid), PlayerPercentages.oxygenPercentage.get(uuid));
             }
         }
     }
