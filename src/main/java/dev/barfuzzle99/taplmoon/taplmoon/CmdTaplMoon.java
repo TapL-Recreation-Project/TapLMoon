@@ -40,9 +40,55 @@ public class CmdTaplMoon implements TabExecutor {
                 return cmdDelete(sender, command, label, args);
             case "help":
                 return cmdHelp(sender, command, label, args);
+            case "forcejoinall":
+                return forceJoinAll(sender, command, label, args);
             default:
                 sender.sendMessage(prefix + " " + invalidUsageMsg);
                 break;
+        }
+        return false;
+    }
+
+    public boolean forceJoinAll(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length > 1) {
+            sender.sendMessage(prefix + " " + invalidUsageMsg);
+            return false;
+        }
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(prefix + ChatColor.YELLOW + " This is a player only command!");
+            return false;
+        }
+        if (!sender.isOp() && !sender.hasPermission("taplmoon.forcejoinall")) {
+            sender.sendMessage(noPermsMsg);
+            return false;
+        }
+        Player player = (Player) sender;
+        if (MoonWorldUtil.getLoadedMoonWorlds().size() == 0) {
+            if (MoonWorldUtil.areThereMoonWorlds()) {
+                MoonWorldCreator.forceLoadWorlds();
+            } else {
+                sender.sendMessage(prefix + ChatColor.YELLOW + " No moon worlds created yet!");
+                return false;
+            }
+        }
+        for (Player others : Bukkit.getOnlinePlayers()) {
+            if (MoonWorldUtil.isMoonWorld(others.getWorld())) {
+                sender.sendMessage(prefix + ChatColor.YELLOW + " You're already in a moon world!");
+                return false;
+            }
+            World moonOverworld = Bukkit.getWorld("moon");
+            ConfigUtil.savePlayerLastNormalWorldLoc(others, others.getLocation());
+            Location lastMoonWorldLoc = ConfigUtil.getPlayerLastNo99WorldLoc(others);
+            if (lastMoonWorldLoc != null && lastMoonWorldLoc.getWorld() != null) {
+                others.teleport(lastMoonWorldLoc);
+            } else {
+                others.teleport(moonOverworld.getSpawnLocation());
+            }
+            PlayerPercentages.oxygenPercentage.put(others.getUniqueId(), 99);
+            PlayerPercentages.oxygenDecimal.put(others.getUniqueId(), 99);
+            others.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829441177031540757/MoonPack.zip");
+            SuitManager.giveSpaceSuit(others);
+            return false;
         }
         return false;
     }
