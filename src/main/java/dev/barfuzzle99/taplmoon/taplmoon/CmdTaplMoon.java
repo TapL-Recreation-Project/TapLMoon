@@ -78,7 +78,7 @@ public class CmdTaplMoon implements TabExecutor {
             }
             World moonOverworld = Bukkit.getWorld("moon");
             ConfigUtil.savePlayerLastNormalWorldLoc(others, others.getLocation());
-            Location lastMoonWorldLoc = ConfigUtil.getPlayerLastNo99WorldLoc(others);
+            Location lastMoonWorldLoc = ConfigUtil.getPlayerLastMoonWorldLoc(others);
             if (lastMoonWorldLoc != null && lastMoonWorldLoc.getWorld() != null) {
                 others.teleport(lastMoonWorldLoc);
             } else {
@@ -88,7 +88,6 @@ public class CmdTaplMoon implements TabExecutor {
             PlayerPercentages.oxygenDecimal.put(others.getUniqueId(), 99);
             others.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829441177031540757/MoonPack.zip");
             SuitManager.giveSpaceSuit(others);
-            return false;
         }
         return false;
     }
@@ -117,7 +116,7 @@ public class CmdTaplMoon implements TabExecutor {
         }
         World moonOverworld = Bukkit.getWorld("moon");
         ConfigUtil.savePlayerLastNormalWorldLoc(player, player.getLocation());
-        Location lastMoonWorldLoc = ConfigUtil.getPlayerLastNo99WorldLoc(player);
+        Location lastMoonWorldLoc = ConfigUtil.getPlayerLastMoonWorldLoc(player);
         if (lastMoonWorldLoc != null && lastMoonWorldLoc.getWorld() != null) {
             player.teleport(lastMoonWorldLoc);
         } else {
@@ -182,7 +181,7 @@ public class CmdTaplMoon implements TabExecutor {
         }
 
         if (args.length == 1) {
-            ConfigUtil.savePlayerLastNo99WorldLoc(player, player.getLocation());
+            ConfigUtil.savePlayerLastMoonWorldLoc(player, player.getLocation());
             Location loc = ConfigUtil.getPlayerLastNormalWorldLoc(player);
             if (loc == null) {
                 TaplMoon.getInstance().getLogger().log(Level.SEVERE, "Could not get last location in normal world for " + player.getName() +
