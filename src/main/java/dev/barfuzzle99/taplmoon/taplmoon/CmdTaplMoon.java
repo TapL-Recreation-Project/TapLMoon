@@ -73,8 +73,8 @@ public class CmdTaplMoon implements TabExecutor {
         }
         for (Player others : Bukkit.getOnlinePlayers()) {
             if (MoonWorldUtil.isMoonWorld(others.getWorld())) {
-                sender.sendMessage(prefix + ChatColor.YELLOW + " You're already in a moon world!");
-                return false;
+                others.sendMessage(prefix + ChatColor.YELLOW + " You're already in a moon world!");
+                continue;
             }
             World moonOverworld = Bukkit.getWorld("moon");
             ConfigUtil.savePlayerLastNormalWorldLoc(others, others.getLocation());
