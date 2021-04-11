@@ -120,8 +120,7 @@ public class CmdTaplMoon implements TabExecutor {
         }
         PlayerPercentages.oxygenPercentage.put(player.getUniqueId(), 99);
         PlayerPercentages.oxygenDecimal.put(player.getUniqueId(), 99);
-        byte[] sha1hash = Base64.decodeBase64("15c9043aa613a538a88e706cc402dac65d56db67");
-        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829441177031540757/MoonPack.zip", sha1hash);
+        player.setResourcePack("https://cdn.discordapp.com/attachments/812394140577824808/829441177031540757/MoonPack.zip");
         SuitManager.giveSpaceSuit(player);
     }
 
